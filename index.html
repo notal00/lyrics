@@ -78,6 +78,7 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
   box-shadow: 0 8px 24px var(--shadow);
   width: 100%; position: relative;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .card-lyric {
@@ -87,22 +88,24 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
 }
 
 .card-meta { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid var(--bg); }
-.card-song-name { font-weight: 500; font-size: 13px; color: var(--text-soft); }
-.card-artist { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+.card-song-name { font-family: var(--ui-font); font-weight: 500; font-size: 13px; color: var(--text-soft); }
+.card-artist { font-family: var(--ui-font); font-size: 11px; color: var(--text-faint); margin-top: 3px; }
 .card-date { font-size: 10px; color: var(--text-faint); font-family: "Georgia", serif; opacity: 0.8; }
 
 .refresh-btn {
   margin-top: 16px;
-  padding: 6px 14px;
-  border-radius: 4px;
+  padding: 6px 16px;
+  border-radius: 20px;
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-faint);
-  font-size: 9px;
+  font-size: 11px;
   cursor: pointer;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   font-family: var(--ui-font);
+  transition: all 0.3s;
 }
+.refresh-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
 
 .form-section { width: 100%; max-width: 460px; z-index: 1; margin-top: 30px; }
 .form-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; margin-bottom: 24px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
@@ -110,31 +113,28 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
 .field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
 
-/* 重点优化：带边框且字体精致的输入框 */
 .field input, .field textarea {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 8px 12px;
   color: var(--text);
-  font-family: var(--ui-font); /* 输入内容字体 */
+  font-family: var(--ui-font);
   font-size: 14px;
   outline: none;
   transition: all 0.3s;
 }
 
-/* 占位符（提示文字）字体设置 */
 .field input::placeholder, .field textarea::placeholder {
   font-family: var(--ui-font);
   color: var(--text-faint);
   font-size: 13px;
-  font-weight: 300;
 }
 
 .field textarea { line-height: 1.6; height: 90px; }
-.field input:focus, .field textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 2px rgba(158,137,122,0.1); }
+.field input:focus, .field textarea:focus { border-color: var(--accent-light); }
 
-.tip { font-size: 9px; color: var(--text-faint); margin-top: 6px; font-weight: 400; }
+.tip { font-size: 9px; color: var(--text-faint); margin-top: 4px; font-weight: 400; }
 
 .row { display: flex; gap: 15px; }
 .row .field { flex: 1; }
@@ -146,7 +146,7 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
 .submit-btn {
   width: 100%; padding: 12px; background: var(--accent); color: var(--bg);
   border: none; border-radius: 4px; cursor: pointer;
-  letter-spacing: 0.6em; font-size: 11px; margin-top: 10px;
+  letter-spacing: 0.6em; font-size: 13px; margin-top: 10px;
   font-family: var(--ui-font);
 }
 
@@ -177,7 +177,7 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
   <div class="form-section-label">ADD NEW</div>
   <div class="field">
     <label>LYRICS</label>
-    <textarea id="lyricInput" placeholder="在此输入歌词内容..." rows="3"></textarea>
+    <textarea id="lyricInput" placeholder="输入歌词内容..." rows="3"></textarea>
     <div class="tip">* 填写时按回车键即可换行排版</div>
   </div>
   <div class="row">
@@ -190,7 +190,7 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
       <input id="artistInput" type="text" placeholder="歌手">
     </div>
   </div>
-  <button class="submit-btn" id="submitBtn" onclick="submitLyric()">Submit</button>
+  <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
   <div id="formMsg" style="text-align:center; font-size:10px; margin-top:10px; color:var(--accent-light); height:14px;"></div>
 </div>
 
@@ -233,7 +233,7 @@ function showRandomCard(initial = false) {
         <div class="card-date">${dateStr}</div>
       </div>
     </div>
-    <button class="refresh-btn" onclick="showRandomCard()">NEXT</button>
+    <button class="refresh-btn" onclick="showRandomCard()">换一条看看</button>
   `;
 }
 
