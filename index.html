@@ -21,89 +21,197 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
---bg: #f5f2ec; --bg2: #ede9e0; --surface: #ffffff; --border: #d8d2c5;
---text: #1a1814; --text-soft: #6b6560; --text-faint: #a09890;
---accent: #2c2420; --accent-light: #8b6f5e; --ink: #1a1814;
---shadow: rgba(30,24,18,0.08); --shadow-md: rgba(30,24,18,0.14);
---radius: 2px; --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  --bg: #f5f2ec;
+  --bg2: #ede9e0;
+  --surface: #ffffff;
+  --border: #d8d2c5;
+  --text: #1a1814;
+  --text-soft: #6b6560;
+  --text-faint: #a09890;
+  --accent: #2c2420;
+  --accent-light: #8b6f5e;
+  --shadow: rgba(30,24,18,0.08);
+  --shadow-md: rgba(30,24,18,0.12);
+  --radius: 4px;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
 }
+
 @media (prefers-color-scheme: dark) {
-:root {
---bg: #141210; --bg2: #1c1917; --surface: #211f1c; --border: #332f2a;
---text: #f0ebe3; --text-soft: #9a9088; --text-faint: #5c5650;
---accent: #e8ddd0; --accent-light: #c4a98a; --ink: #f0ebe3;
---shadow: rgba(0,0,0,0.3); --shadow-md: rgba(0,0,0,0.45);
+  :root {
+    --bg: #141210; --bg2: #1c1917; --surface: #211f1c; --border: #332f2a;
+    --text: #f0ebe3; --text-soft: #9a9088; --text-faint: #5c5650;
+    --accent: #e8ddd0; --accent-light: #c4a98a; --shadow: rgba(0,0,0,0.3);
+  }
 }
-}
+
 body {
-background: var(--bg); color: var(--text);
-font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
-font-weight: 300; min-height: 100dvh; display: flex;
-flex-direction: column; align-items: center; padding: 0 16px 120px;
-position: relative; overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px 80px;
+  line-height: 1.6;
 }
+
+/* 装饰：背景纹理 */
 body::before {
-content: ''; position: fixed; inset: 0;
-background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-pointer-events: none; z-index: 0; opacity: 0.6;
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
 }
-header { width: 100%; max-width: 520px; padding: 48px 0 32px; position: relative; z-index: 1; }
-.site-title { font-family: 'Noto Serif SC', 'Songti SC', serif; font-weight: 300; font-size: clamp(28px, 8vw, 38px); letter-spacing: 0.12em; color: var(--text); display: flex; align-items: baseline; gap: 10px; }
-.site-title-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-light); margin-bottom: 4px; flex-shrink: 0; }
-.site-sub { font-size: 11px; letter-spacing: 0.2em; color: var(--text-faint); text-transform: uppercase; margin-top: 6px; margin-left: 16px; }
-.divider { width: 100%; max-width: 520px; height: 1px; background: var(--border); position: relative; z-index: 1; }
-.card-area { width: 100%; max-width: 520px; padding: 48px 0 32px; position: relative; z-index: 1; min-height: 60vh; display: flex; flex-direction: column; align-items: stretch; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 36px 32px; box-shadow: 0 2px 12px var(--shadow); cursor: pointer; position: relative; overflow: hidden; transition: transform var(--transition), box-shadow var(--transition); user-select: none; -webkit-tap-highlight-color: transparent; }
-.card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent-light); opacity: 0.6; }
-.card:active { transform: scale(0.985); box-shadow: 0 1px 6px var(--shadow); }
-.card-lyric { font-family: 'Noto Serif SC', 'Songti SC', serif; font-weight: 300; font-size: clamp(16px, 4.5vw, 20px); line-height: 1.9; color: var(--text); white-space: pre-wrap; word-break: break-all; margin-bottom: 28px; }
-.card-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-.card-song-name { font-size: 13px; font-weight: 400; color: var(--text-soft); letter-spacing: 0.04em; }
-.card-artist, .card-date { font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; }
-.state-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 80px 0; color: var(--text-faint); font-size: 13px; }
-.spinner { width: 20px; height: 20px; border: 1.5px solid var(--border); border-top-color: var(--accent-light); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.card.entering { animation: fadeSlideIn 0.35s ease forwards; }
-.form-section { width: 100%; max-width: 520px; position: relative; z-index: 1; padding-top: 16px; }
-.form-section-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 20px; }
-.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-.field label { font-size: 11px; letter-spacing: 0.15em; color: var(--text-faint); }
-.field input, .field textarea { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; color: var(--text); font-family: inherit; font-size: 15px; outline: none; width: 100%; }
-.submit-btn { width: 100%; padding: 14px; background: var(--accent); color: var(--bg); border: none; cursor: pointer; letter-spacing: 0.2em; }
-.fab { position: fixed; bottom: 28px; right: 24px; width: 48px; height: 48px; background: var(--accent); color: var(--bg); border: none; border-radius: 50%; font-size: 22px; cursor: pointer; box-shadow: 0 4px 20px var(--shadow-md); z-index: 100; display: flex; align-items: center; justify-content: center; }
-.row { display: flex; gap: 12px; } .row .field { flex: 1; }
-.section-gap { width: 100%; max-width: 520px; height: 1px; background: var(--border); margin: 24px 0; }
+
+header { width: 100%; max-width: 500px; padding: 40px 0 20px; z-index: 1; }
+.site-title { font-family: 'Noto Serif SC', serif; font-size: 32px; letter-spacing: 0.1em; display: flex; align-items: center; gap: 12px; }
+.site-title-dot { width: 8px; height: 8px; background: var(--accent-light); border-radius: 50%; }
+.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; text-transform: uppercase; margin: 4px 0 0 20px; }
+
+.card-area {
+  width: 100%; max-width: 500px;
+  padding: 20px 0 30px; /* 缩小上下间距 */
+  min-height: 350px; /* 降低最小高度，防止太空 */
+  display: flex; flex-direction: column; align-items: center; z-index: 1;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 30px;
+  box-shadow: 0 10px 30px var(--shadow);
+  width: 100%; position: relative;
+  transition: transform 0.4s, box-shadow 0.4s;
+  cursor: pointer;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px var(--shadow-md); }
+
+.card-lyric {
+  font-family: 'Noto Serif SC', serif; /* 强制宋体 */
+  font-size: 1.2rem; line-height: 1.8;
+  white-space: pre-wrap; margin-bottom: 30px;
+  color: var(--text);
+}
+
+.card-meta { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border); padding-top: 15px; }
+.card-song-name { font-weight: 500; font-size: 14px; color: var(--text-soft); }
+.card-artist { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+.card-date { font-size: 11px; color: var(--text-faint); font-family: serif; font-style: italic; }
+
+/* 换一条按钮样式优化 */
+.refresh-btn {
+  margin-top: 25px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text-soft);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex; align-items: center; gap: 8px;
+}
+.refresh-btn:hover { background: var(--surface); color: var(--accent-light); border-color: var(--accent-light); }
+
+.form-section { width: 100%; max-width: 500px; z-index: 1; border-top: 1px solid var(--border); padding-top: 40px; }
+.form-section-label { font-size: 11px; color: var(--text-faint); letter-spacing: 0.2em; margin-bottom: 20px; text-align: center; }
+
+.field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; }
+
+/* 重点优化：输入框精致化 */
+.field input, .field textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px; /* 缩小padding */
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s;
+}
+.field textarea { font-family: 'Noto Serif SC', serif; line-height: 1.6; }
+.field input:focus, .field textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 3px rgba(139,111,94,0.1); }
+
+.tip { font-size: 10px; color: var(--text-faint); margin-top: -8px; margin-bottom: 12px; }
+
+.submit-btn {
+  width: 100%; padding: 12px; background: var(--accent); color: var(--bg);
+  border: none; border-radius: var(--radius); cursor: pointer;
+  letter-spacing: 0.5em; font-size: 13px; transition: opacity 0.3s;
+}
+.submit-btn:hover { opacity: 0.9; }
+
+.fab {
+  position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+  background: var(--accent); color: var(--bg); border: none; border-radius: 50%;
+  font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px var(--shadow); z-index: 100;
+}
+
+.row { display: flex; gap: 15px; } .row .field { flex: 1; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.entering { animation: fadeUp 0.6s ease-out forwards; }
 </style>
 </head>
 <body>
-<header><div class="site-title"><div class="site-title-dot"></div>歌词本</div><div class="site-sub">lyrics journal</div></header>
-<div class="divider"></div>
-<div class="card-area" id="cardArea"><div class="state-msg" id="loadingMsg"><div class="spinner"></div><span>loading</span></div></div>
-<div class="section-gap"></div>
-<div class="form-section" id="formSection">
-  <div class="form-section-label">记录一条歌词</div>
-  <div class="field"><label>歌词</label><textarea id="lyricInput" placeholder="写下那句打动你的歌词…" rows="4"></textarea></div>
-  <div class="row"><div class="field"><label>歌名</label><input id="songInput" type="text"></div><div class="field"><label>歌手</label><input id="artistInput" type="text"></div></div>
-  <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
-  <div class="form-msg" id="formMsg"></div>
+
+<header>
+  <div class="site-title"><div class="site-title-dot"></div>歌词本</div>
+  <div class="site-sub">Personal Lyrics Collection</div>
+</header>
+
+<div class="card-area" id="cardArea">
+  <div class="state-msg">正在加载...</div>
 </div>
+
+<div class="form-section" id="formSection">
+  <div class="form-section-label">ADD NEW PIECE</div>
+  <div class="field">
+    <label>歌词内容</label>
+    <textarea id="lyricInput" placeholder="在此输入歌词..." rows="4"></textarea>
+    <div class="tip">* 支持直接换行排版</div>
+  </div>
+  <div class="row">
+    <div class="field">
+      <label>歌名</label>
+      <input id="songInput" type="text" placeholder="Song Title">
+    </div>
+    <div class="field">
+      <label>歌手</label>
+      <input id="artistInput" type="text" placeholder="Artist">
+    </div>
+  </div>
+  <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
+  <div id="formMsg" style="text-align:center; font-size:12px; margin-top:10px;"></div>
+</div>
+
 <button class="fab" onclick="scrollToForm()">＋</button>
 
 <script>
+// Supabase 配置保持不变
 const SUPABASE_URL = 'https://zkpctzxyqpiiqxvnmauo.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcGN0enh5cXBpaXF4dm5tYXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNDkxNDAsImV4cCI6MjA5MDkyNTE0MH0.Z7WdneCs_vJOblWho1neuMLI86h1FrdNqi6N2-DI4ZQ';
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let allLyrics = [];
 let currentId = null;
 
 async function loadLyrics() {
   const { data, error } = await db.from('lyrics').select('*').order('created_at', { ascending: false });
-  if (error || !data) { document.getElementById('cardArea').innerHTML = '<div class="state-msg">加载失败</div>'; return; }
-  if (data.length === 0) { document.getElementById('cardArea').innerHTML = '<div class="state-msg">还没有歌词</div>'; return; }
-  allLyrics = data; showRandomCard(true);
+  if (error || !data) { document.getElementById('cardArea').innerHTML = '加载失败'; return; }
+  allLyrics = data;
+  if (data.length > 0) showRandomCard(true);
+  else document.getElementById('cardArea').innerHTML = '<div class="state-msg">暂无内容</div>';
 }
 
 function showRandomCard(initial = false) {
@@ -111,26 +219,61 @@ function showRandomCard(initial = false) {
   let candidates = allLyrics.length > 1 && currentId ? allLyrics.filter(l => l.id !== currentId) : allLyrics;
   const item = candidates[Math.floor(Math.random() * candidates.length)];
   currentId = item.id;
+  
   const date = new Date(item.created_at);
-  const dateStr = `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;
-  area.innerHTML = `<div class="card entering" id="lyricCard" onclick="showRandomCard()"><div class="card-lyric">${escHtml(item.lyric)}</div><div class="card-meta"><div class="card-song"><div class="card-song-name">${escHtml(item.song_name)}</div><div class="card-artist">${escHtml(item.artist)}</div></div><div class="card-date">${dateStr}</div></div></div><div class="card-hint">点击换一条</div>`;
+  const dateStr = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`;
+
+  area.innerHTML = `
+    <div class="card entering" onclick="showRandomCard()">
+      <div class="card-lyric">${escHtml(item.lyric)}</div>
+      <div class="card-meta">
+        <div>
+          <div class="card-song-name">《${escHtml(item.song_name)}》</div>
+          <div class="card-artist">${escHtml(item.artist)}</div>
+        </div>
+        <div class="card-date">${dateStr}</div>
+      </div>
+    </div>
+    <button class="refresh-btn" onclick="showRandomCard()">
+      <span>↻</span> 换一条看看
+    </button>
+  `;
 }
 
-function escHtml(str) { return str ? str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+function escHtml(str) { 
+  if(!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>'); 
+}
 
 async function submitLyric() {
   const lyric = document.getElementById('lyricInput').value.trim();
   const song = document.getElementById('songInput').value.trim();
   const artist = document.getElementById('artistInput').value.trim();
-  if (!lyric || !song || !artist) return;
+  const msg = document.getElementById('formMsg');
+
+  if (!lyric || !song || !artist) {
+    msg.innerText = "请填写完整";
+    return;
+  }
+
   const { data, error } = await db.from('lyrics').insert([{ lyric, song_name: song, artist }]).select().single();
-  if (error) return;
-  allLyrics.unshift(data); showRandomCard(false);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  if (error) {
+    msg.innerText = "记录失败";
+  } else {
+    msg.innerText = "已成功记录";
+    allLyrics.unshift(data);
+    showRandomCard(false);
+    document.getElementById('lyricInput').value = '';
+    document.getElementById('songInput').value = '';
+    document.getElementById('artistInput').value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function scrollToForm() { document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' }); }
 loadLyrics();
 </script>
+
 </body>
 </html>
