@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <title>歌词本</title>
 <script>
 (function() {
@@ -35,7 +35,6 @@
   --shadow: rgba(30,24,18,0.08);
   --shadow-md: rgba(30,24,18,0.12);
   --radius: 4px;
-  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,31 +48,31 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+  font-family: 'Noto Sans SC', sans-serif;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 20px 80px;
+  padding: 0 16px 60px; /* 减小底部 padding */
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* 装饰：背景纹理 */
 body::before {
   content: ''; position: fixed; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 0;
 }
 
-header { width: 100%; max-width: 500px; padding: 40px 0 20px; z-index: 1; }
-.site-title { font-family: 'Noto Serif SC', serif; font-size: 32px; letter-spacing: 0.1em; display: flex; align-items: center; gap: 12px; }
-.site-title-dot { width: 8px; height: 8px; background: var(--accent-light); border-radius: 50%; }
-.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; text-transform: uppercase; margin: 4px 0 0 20px; }
+header { width: 100%; max-width: 500px; padding: 30px 0 10px; z-index: 1; }
+.site-title { font-family: 'Noto Serif SC', serif; font-size: 28px; letter-spacing: 0.1em; display: flex; align-items: center; gap: 10px; }
+.site-title-dot { width: 6px; height: 6px; background: var(--accent-light); border-radius: 50%; }
+.site-sub { font-size: 9px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin: 2px 0 0 16px; }
 
 .card-area {
   width: 100%; max-width: 500px;
-  padding: 20px 0 30px; /* 缩小上下间距 */
-  min-height: 350px; /* 降低最小高度，防止太空 */
+  padding: 20px 0;
+  min-height: 300px; 
   display: flex; flex-direction: column; align-items: center; z-index: 1;
 }
 
@@ -81,92 +80,91 @@ header { width: 100%; max-width: 500px; padding: 40px 0 20px; z-index: 1; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 40px 30px;
-  box-shadow: 0 10px 30px var(--shadow);
+  padding: 30px 24px;
+  box-shadow: 0 8px 24px var(--shadow);
   width: 100%; position: relative;
-  transition: transform 0.4s, box-shadow 0.4s;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px var(--shadow-md); }
 
 .card-lyric {
-  font-family: 'Noto Serif SC', serif; /* 强制宋体 */
-  font-size: 1.2rem; line-height: 1.8;
-  white-space: pre-wrap; margin-bottom: 30px;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.15rem; line-height: 1.7;
+  white-space: pre-wrap; margin-bottom: 25px;
   color: var(--text);
 }
 
-.card-meta { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border); padding-top: 15px; }
-.card-song-name { font-weight: 500; font-size: 14px; color: var(--text-soft); }
-.card-artist { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
-.card-date { font-size: 11px; color: var(--text-faint); font-family: serif; font-style: italic; }
+.card-meta { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed var(--border); padding-top: 12px; }
+.card-song-name { font-weight: 500; font-size: 13px; color: var(--text-soft); }
+.card-artist { font-size: 11px; color: var(--text-faint); }
+.card-date { font-size: 10px; color: var(--text-faint); font-family: serif; }
 
-/* 换一条按钮样式优化 */
 .refresh-btn {
-  margin-top: 25px;
-  padding: 8px 20px;
-  border-radius: 20px;
+  margin-top: 20px;
+  padding: 6px 16px;
+  border-radius: 18px;
   border: 1px solid var(--border);
   background: var(--bg2);
   color: var(--text-soft);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-size: 11px;
   cursor: pointer;
-  transition: all 0.3s;
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 6px;
 }
-.refresh-btn:hover { background: var(--surface); color: var(--accent-light); border-color: var(--accent-light); }
 
-.form-section { width: 100%; max-width: 500px; z-index: 1; border-top: 1px solid var(--border); padding-top: 40px; }
-.form-section-label { font-size: 11px; color: var(--text-faint); letter-spacing: 0.2em; margin-bottom: 20px; text-align: center; }
+.form-section { width: 100%; max-width: 500px; z-index: 1; border-top: 1px solid var(--border); padding-top: 30px; margin-top: 10px; }
+.form-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; margin-bottom: 16px; text-align: center; }
 
-.field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-.field label { font-size: 11px; color: var(--text-faint); text-transform: uppercase; }
+.field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 10px; color: var(--text-faint); }
 
-/* 重点优化：输入框精致化 */
 .field input, .field textarea {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px 14px; /* 缩小padding */
+  padding: 8px 12px;
   color: var(--text);
   font-family: inherit;
   font-size: 14px;
   outline: none;
-  transition: all 0.3s;
+  -webkit-appearance: none;
 }
-.field textarea { font-family: 'Noto Serif SC', serif; line-height: 1.6; }
-.field input:focus, .field textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 3px rgba(139,111,94,0.1); }
+.field textarea { font-family: 'Noto Serif SC', serif; line-height: 1.5; resize: none; }
+.field input:focus, .field textarea:focus { border-color: var(--accent-light); }
 
-.tip { font-size: 10px; color: var(--text-faint); margin-top: -8px; margin-bottom: 12px; }
+.tip { font-size: 9px; color: var(--text-faint); margin-top: -8px; margin-bottom: 10px; }
+
+/* 关键修复：响应式布局 */
+.row { display: flex; gap: 12px; }
+.row .field { flex: 1; min-width: 0; }
+
+@media (max-width: 480px) {
+  .row { flex-direction: column; gap: 0; } /* 手机端变为上下堆叠 */
+}
 
 .submit-btn {
   width: 100%; padding: 12px; background: var(--accent); color: var(--bg);
   border: none; border-radius: var(--radius); cursor: pointer;
-  letter-spacing: 0.5em; font-size: 13px; transition: opacity 0.3s;
+  letter-spacing: 0.4em; font-size: 13px; margin-top: 10px;
 }
-.submit-btn:hover { opacity: 0.9; }
 
 .fab {
-  position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+  position: fixed; bottom: 20px; right: 20px; width: 44px; height: 44px;
   background: var(--accent); color: var(--bg); border: none; border-radius: 50%;
-  font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px var(--shadow); z-index: 100;
+  font-size: 20px; cursor: pointer; box-shadow: 0 8px 16px var(--shadow); z-index: 100;
 }
-
-.row { display: flex; gap: 15px; } .row .field { flex: 1; }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.entering { animation: fadeUp 0.6s ease-out forwards; }
+.entering { animation: fadeUp 0.5s ease-out forwards; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="site-title"><div class="site-title-dot"></div>歌词本</div>
-  <div class="site-sub">Personal Lyrics Collection</div>
+  <div class="site-sub">Personal Lyrics Journal</div>
 </header>
 
 <div class="card-area" id="cardArea">
@@ -174,11 +172,11 @@ header { width: 100%; max-width: 500px; padding: 40px 0 20px; z-index: 1; }
 </div>
 
 <div class="form-section" id="formSection">
-  <div class="form-section-label">ADD NEW PIECE</div>
+  <div class="form-section-label">记录新篇章</div>
   <div class="field">
     <label>歌词内容</label>
-    <textarea id="lyricInput" placeholder="在此输入歌词..." rows="4"></textarea>
-    <div class="tip">* 支持直接换行排版</div>
+    <textarea id="lyricInput" placeholder="在此输入歌词..." rows="3"></textarea>
+    <div class="tip">* 填写时请直接回车换行以保持排版</div>
   </div>
   <div class="row">
     <div class="field">
@@ -191,13 +189,12 @@ header { width: 100%; max-width: 500px; padding: 40px 0 20px; z-index: 1; }
     </div>
   </div>
   <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
-  <div id="formMsg" style="text-align:center; font-size:12px; margin-top:10px;"></div>
+  <div id="formMsg" style="text-align:center; font-size:11px; margin-top:8px; height:14px;"></div>
 </div>
 
 <button class="fab" onclick="scrollToForm()">＋</button>
 
 <script>
-// Supabase 配置保持不变
 const SUPABASE_URL = 'https://zkpctzxyqpiiqxvnmauo.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcGN0enh5cXBpaXF4dm5tYXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNDkxNDAsImV4cCI6MjA5MDkyNTE0MH0.Z7WdneCs_vJOblWho1neuMLI86h1FrdNqi6N2-DI4ZQ';
 const { createClient } = supabase;
@@ -221,7 +218,7 @@ function showRandomCard(initial = false) {
   currentId = item.id;
   
   const date = new Date(item.created_at);
-  const dateStr = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`;
+  const dateStr = `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()}`;
 
   area.innerHTML = `
     <div class="card entering" onclick="showRandomCard()">
@@ -250,16 +247,19 @@ async function submitLyric() {
   const song = document.getElementById('songInput').value.trim();
   const artist = document.getElementById('artistInput').value.trim();
   const msg = document.getElementById('formMsg');
+  const btn = document.getElementById('submitBtn');
 
   if (!lyric || !song || !artist) {
     msg.innerText = "请填写完整";
     return;
   }
 
+  btn.disabled = true;
   const { data, error } = await db.from('lyrics').insert([{ lyric, song_name: song, artist }]).select().single();
   
   if (error) {
     msg.innerText = "记录失败";
+    btn.disabled = false;
   } else {
     msg.innerText = "已成功记录";
     allLyrics.unshift(data);
@@ -267,11 +267,22 @@ async function submitLyric() {
     document.getElementById('lyricInput').value = '';
     document.getElementById('songInput').value = '';
     document.getElementById('artistInput').value = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    btn.disabled = false;
+    // 延时滚动，避免与软键盘关闭冲突
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   }
 }
 
-function scrollToForm() { document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' }); }
+function scrollToForm() { 
+  const target = document.getElementById('formSection');
+  // 使用 offsetTop 避开 smooth scroll 锚点问题
+  window.scrollTo({
+    top: target.offsetTop - 20,
+    behavior: 'smooth'
+  });
+}
 loadLyrics();
 </script>
 
