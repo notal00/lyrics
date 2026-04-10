@@ -7,7 +7,7 @@
 <script>
 (function() {
   var mirrors = ['https://fonts.googleapis.com','https://fonts.loli.net','https://fonts.font.im','https://googlefonts.cn'];
-  var path = '/css2?family=Noto+Serif+SC:wght@300;400;500&family=Noto+Sans+SC:wght@300;400&display=swap';
+  var path = '/css2?family=Noto+Serif+SC:wght@300;400;500&display=swap';
   var loaded = false;
   mirrors.forEach(function(base, i) {
     var link = document.createElement('link');
@@ -25,18 +25,19 @@
 :root {
   --bg: #f6f3ed;
   --surface: #ffffff;
-  --border: #e2dfd7;
+  --border: #dcd9d0;
   --text: #2a2825;
   --text-soft: #7a756d;
   --text-faint: #b8b1a8;
   --accent: #3d3530;
   --accent-light: #9e897a;
   --shadow: rgba(40,30,20,0.05);
+  --ui-font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #161412; --surface: #1e1c1a; --border: #332f2b;
+    --bg: #161412; --surface: #1e1c1a; --border: #3d3935;
     --text: #e8e4de; --text-soft: #a8a096; --text-faint: #6e675e;
     --accent: #f0e6d8; --accent-light: #c4a98a; --shadow: rgba(0,0,0,0.2);
   }
@@ -45,12 +46,12 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--ui-font);
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 24px 80px;
+  padding: 0 24px 60px;
 }
 
 body::before {
@@ -59,87 +60,94 @@ body::before {
   pointer-events: none; z-index: 0;
 }
 
-header { width: 100%; max-width: 460px; padding: 50px 0 15px; z-index: 1; }
+header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
 .site-title { font-family: 'Noto Serif SC', serif; font-size: 24px; letter-spacing: 0.15em; display: flex; align-items: center; gap: 10px; }
 .site-title-dot { width: 4px; height: 4px; background: var(--accent-light); border-radius: 50%; opacity: 0.6; }
-.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; font-weight: 400; }
+.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; }
 
 .card-area {
   width: 100%; max-width: 460px;
-  padding: 20px 0 10px;
-  min-height: 260px;
+  padding: 15px 0;
   display: flex; flex-direction: column; align-items: center; z-index: 1;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  padding: 35px 28px;
-  box-shadow: 0 10px 30px var(--shadow);
+  padding: 32px 26px;
+  box-shadow: 0 8px 24px var(--shadow);
   width: 100%; position: relative;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .card-lyric {
   font-family: 'Noto Serif SC', serif;
   font-size: 1.05rem; line-height: 1.8;
-  white-space: pre-wrap; margin-bottom: 28px;
+  white-space: pre-wrap; margin-bottom: 24px;
 }
 
-.card-meta { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 18px; border-top: 1px solid var(--bg); }
+.card-meta { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid var(--bg); }
 .card-song-name { font-weight: 500; font-size: 13px; color: var(--text-soft); }
 .card-artist { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
 .card-date { font-size: 10px; color: var(--text-faint); font-family: "Georgia", serif; opacity: 0.8; }
 
 .refresh-btn {
-  margin-top: 25px;
-  padding: 6px 16px;
-  border-radius: 2px;
+  margin-top: 16px;
+  padding: 6px 14px;
+  border-radius: 4px;
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-faint);
-  font-size: 10px;
+  font-size: 9px;
   cursor: pointer;
   letter-spacing: 0.1em;
+  font-family: var(--ui-font);
 }
 
-.form-section { width: 100%; max-width: 460px; z-index: 1; margin-top: 50px; padding: 0 5px; }
-.form-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; margin-bottom: 30px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-weight: 500; }
+.form-section { width: 100%; max-width: 460px; z-index: 1; margin-top: 30px; }
+.form-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; margin-bottom: 24px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 
-.field { margin-bottom: 22px; display: flex; flex-direction: column; gap: 6px; }
+.field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
 .field label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
 
+/* 重点优化：带边框且字体精致的输入框 */
 .field input, .field textarea {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  padding: 8px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 12px;
   color: var(--text);
-  font-family: -apple-system, sans-serif;
+  font-family: var(--ui-font); /* 输入内容字体 */
   font-size: 14px;
   outline: none;
-  border-radius: 0;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
 }
 
-.field textarea { font-family: 'Noto Serif SC', serif; line-height: 1.6; height: 90px; }
-.field input:focus, .field textarea:focus { border-color: var(--accent-light); }
+/* 占位符（提示文字）字体设置 */
+.field input::placeholder, .field textarea::placeholder {
+  font-family: var(--ui-font);
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: 300;
+}
 
-.tip { font-size: 9px; color: var(--text-faint); margin-top: 12px; font-weight: 300; }
+.field textarea { line-height: 1.6; height: 90px; }
+.field input:focus, .field textarea:focus { border-color: var(--accent-light); box-shadow: 0 0 0 2px rgba(158,137,122,0.1); }
 
-.row { display: flex; gap: 30px; }
+.tip { font-size: 9px; color: var(--text-faint); margin-top: 6px; font-weight: 400; }
+
+.row { display: flex; gap: 15px; }
 .row .field { flex: 1; }
 
 @media (max-width: 480px) {
-  .row { flex-direction: column; gap: 5px; }
+  .row { flex-direction: column; gap: 0; }
 }
 
 .submit-btn {
-  width: 100%; padding: 14px; background: var(--accent); color: var(--bg);
-  border: none; cursor: pointer;
-  letter-spacing: 0.6em; font-size: 11px; margin-top: 15px;
-  text-transform: uppercase;
+  width: 100%; padding: 12px; background: var(--accent); color: var(--bg);
+  border: none; border-radius: 4px; cursor: pointer;
+  letter-spacing: 0.6em; font-size: 11px; margin-top: 10px;
+  font-family: var(--ui-font);
 }
 
 .fab {
@@ -150,10 +158,10 @@ header { width: 100%; max-width: 460px; padding: 50px 0 15px; z-index: 1; }
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.entering { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.entering { animation: fadeUp 0.6s ease-out forwards; }
 </style>
 </head>
 <body>
@@ -163,15 +171,13 @@ header { width: 100%; max-width: 460px; padding: 50px 0 15px; z-index: 1; }
   <div class="site-sub">LYRIC JOURNAL</div>
 </header>
 
-<div class="card-area" id="cardArea">
-  <div class="state-msg" style="font-size:11px; color:var(--text-faint);">Loading...</div>
-</div>
+<div class="card-area" id="cardArea"></div>
 
 <div class="form-section" id="formSection">
   <div class="form-section-label">ADD NEW</div>
   <div class="field">
     <label>LYRICS</label>
-    <textarea id="lyricInput" placeholder="输入歌词内容..." rows="3"></textarea>
+    <textarea id="lyricInput" placeholder="在此输入歌词内容..." rows="3"></textarea>
     <div class="tip">* 填写时按回车键即可换行排版</div>
   </div>
   <div class="row">
@@ -185,7 +191,7 @@ header { width: 100%; max-width: 460px; padding: 50px 0 15px; z-index: 1; }
     </div>
   </div>
   <button class="submit-btn" id="submitBtn" onclick="submitLyric()">Submit</button>
-  <div id="formMsg" style="text-align:center; font-size:10px; margin-top:12px; color:var(--accent-light); height:14px;"></div>
+  <div id="formMsg" style="text-align:center; font-size:10px; margin-top:10px; color:var(--accent-light); height:14px;"></div>
 </div>
 
 <button class="fab" onclick="scrollToForm()">＋</button>
