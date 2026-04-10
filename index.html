@@ -497,7 +497,7 @@ function showRandomCard(initial = false) {
 
   area.innerHTML = `
     <div class="card entering" id="lyricCard" onclick="showRandomCard()">
-      <div class="card-lyric">${escHtml(item.lyric)}</div>
+      <div class="card-lyric">${escHtml(formatLyric(item.lyric))}</div>
       <div class="card-meta">
         <div class="card-song">
           <div class="card-song-name">${escHtml(item.song_name)}</div>
@@ -520,6 +520,16 @@ function showRandomCard(initial = false) {
 
 function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatLyric(str) {
+  // 按换行分句，去掉每行末尾的标点，过滤空行
+  const trailPunct = /[，。；？！、,\.;?!\s]+$/;
+  return str
+    .split('\n')
+    .map(line => line.trim().replace(trailPunct, ''))
+    .filter(line => line.length > 0)
+    .join('\n');
 }
 
 function scrollToForm() {
