@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>歌词本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–bg: #f5f2ec;
+–bg2: #ede9e0;
+–surface: #ffffff;
+–border: #d8d2c5;
+–text: #1a1814;
+–text-soft: #6b6560;
+–text-faint: #a09890;
+–accent: #2c2420;
+–accent-light: #8b6f5e;
+–ink: #1a1814;
+–shadow: rgba(30,24,18,0.08);
+–shadow-md: rgba(30,24,18,0.14);
+–radius: 2px;
+–transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+@media (prefers-color-scheme: dark) {
+:root {
+–bg: #141210;
+–bg2: #1c1917;
+–surface: #211f1c;
+–border: #332f2a;
+–text: #f0ebe3;
+–text-soft: #9a9088;
+–text-faint: #5c5650;
+–accent: #e8ddd0;
+–accent-light: #c4a98a;
+–ink: #f0ebe3;
+–shadow: rgba(0,0,0,0.3);
+–shadow-md: rgba(0,0,0,0.45);
+}
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Noto Sans SC’, sans-serif;
+font-weight: 300;
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0 16px 120px;
+position: relative;
+overflow-x: hidden;
+}
+
+/* grain overlay */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.04’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 0;
+opacity: 0.6;
+}
+
+/* header */
+header {
+width: 100%;
+max-width: 520px;
+padding: 48px 0 32px;
+position: relative;
+z-index: 1;
+}
+
+.site-title {
+font-family: ‘Noto Serif SC’, serif;
+font-weight: 300;
+font-size: clamp(28px, 8vw, 38px);
+letter-spacing: 0.12em;
+color: var(–text);
+display: flex;
+align-items: baseline;
+gap: 10px;
+}
+
+.site-title-dot {
+width: 6px;
+height: 6px;
+border-radius: 50%;
+background: var(–accent-light);
+margin-bottom: 4px;
+flex-shrink: 0;
+}
+
+.site-sub {
+font-size: 11px;
+letter-spacing: 0.2em;
+color: var(–text-faint);
+text-transform: uppercase;
+margin-top: 6px;
+margin-left: 16px;
+}
+
+/* divider */
+.divider {
+width: 100%;
+max-width: 520px;
+height: 1px;
+background: var(–border);
+position: relative;
+z-index: 1;
+}
+
+/* card area */
+.card-area {
+width: 100%;
+max-width: 520px;
+padding: 48px 0 32px;
+position: relative;
+z-index: 1;
+min-height: 60vh;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+}
+
+.card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 40px 36px 32px;
+box-shadow: 0 2px 12px var(–shadow);
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition: transform var(–transition), box-shadow var(–transition);
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+
+.card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0;
+width: 3px;
+height: 100%;
+background: var(–accent-light);
+opacity: 0.6;
+}
+
+.card:active {
+transform: scale(0.985);
+box-shadow: 0 1px 6px var(–shadow);
+}
+
+.card-lyric {
+font-family: ‘Noto Serif SC’, serif;
+font-weight: 300;
+font-size: clamp(16px, 4.5vw, 20px);
+line-height: 1.9;
+color: var(–text);
+white-space: pre-wrap;
+word-break: break-all;
+margin-bottom: 28px;
+}
+
+.card-meta {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+gap: 12px;
+}
+
+.card-song {
+display: flex;
+flex-direction: column;
+gap: 3px;
+}
+
+.card-song-name {
+font-size: 13px;
+font-weight: 400;
+color: var(–text-soft);
+letter-spacing: 0.04em;
+}
+
+.card-artist {
+font-size: 12px;
+color: var(–text-faint);
+letter-spacing: 0.06em;
+}
+
+.card-date {
+font-size: 11px;
+color: var(–text-faint);
+letter-spacing: 0.08em;
+white-space: nowrap;
+font-variant-numeric: tabular-nums;
+}
+
+.card-hint {
+text-align: center;
+font-size: 11px;
+color: var(–text-faint);
+letter-spacing: 0.1em;
+margin-top: 20px;
+opacity: 0.7;
+}
+
+/* loading / empty state */
+.state-msg {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 14px;
+padding: 80px 0;
+color: var(–text-faint);
+font-size: 13px;
+letter-spacing: 0.08em;
+}
+
+.spinner {
+width: 20px;
+height: 20px;
+border: 1.5px solid var(–border);
+border-top-color: var(–accent-light);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* fade transition */
+@keyframes fadeSlideIn {
+from { opacity: 0; transform: translateY(8px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.card.entering { animation: fadeSlideIn 0.35s ease forwards; }
+
+/* form section */
+.form-section {
+width: 100%;
+max-width: 520px;
+position: relative;
+z-index: 1;
+padding-top: 16px;
+}
+
+.form-section-label {
+font-size: 10px;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–text-faint);
+margin-bottom: 20px;
+}
+
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 12px;
+margin-bottom: 12px;
+}
+
+.field {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.field label {
+font-size: 11px;
+letter-spacing: 0.15em;
+color: var(–text-faint);
+text-transform: uppercase;
+}
+
+.field input,
+.field textarea {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 12px 14px;
+color: var(–text);
+font-family: ‘Noto Sans SC’, sans-serif;
+font-weight: 300;
+font-size: 15px;
+outline: none;
+width: 100%;
+transition: border-color var(–transition), box-shadow var(–transition);
+-webkit-appearance: none;
+}
+
+.field textarea {
+font-family: ‘Noto Serif SC’, serif;
+resize: vertical;
+min-height: 120px;
+line-height: 1.8;
+}
+
+.field input:focus,
+.field textarea:focus {
+border-color: var(–accent-light);
+box-shadow: 0 0 0 3px rgba(139,111,94,0.12);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+color: var(–text-faint);
+opacity: 0.7;
+}
+
+.submit-btn {
+width: 100%;
+padding: 14px;
+background: var(–accent);
+color: var(–bg);
+border: none;
+border-radius: var(–radius);
+font-family: ‘Noto Sans SC’, sans-serif;
+font-weight: 400;
+font-size: 13px;
+letter-spacing: 0.2em;
+cursor: pointer;
+transition: opacity var(–transition), transform var(–transition);
+margin-top: 8px;
+-webkit-appearance: none;
+}
+
+.submit-btn:hover { opacity: 0.85; }
+.submit-btn:active { transform: scale(0.98); }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.form-msg {
+font-size: 12px;
+text-align: center;
+margin-top: 12px;
+min-height: 18px;
+letter-spacing: 0.06em;
+color: var(–accent-light);
+transition: opacity 0.3s;
+}
+
+/* FAB */
+.fab {
+position: fixed;
+bottom: 28px;
+right: 24px;
+width: 48px;
+height: 48px;
+background: var(–accent);
+color: var(–bg);
+border: none;
+border-radius: 50%;
+font-size: 22px;
+line-height: 1;
+cursor: pointer;
+box-shadow: 0 4px 20px var(–shadow-md);
+z-index: 100;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: transform var(–transition), opacity var(–transition);
+-webkit-tap-highlight-color: transparent;
+}
+
+.fab:hover { transform: scale(1.08); }
+.fab:active { transform: scale(0.93); }
+
+/* row layout for song+artist */
+.row { display: flex; gap: 12px; }
+.row .field { flex: 1; }
+
+/* count badge */
+.count-badge {
+font-size: 11px;
+color: var(–text-faint);
+letter-spacing: 0.1em;
+margin-top: 4px;
+margin-left: 16px;
+}
+
+/* section gap */
+.section-gap {
+width: 100%;
+max-width: 520px;
+height: 1px;
+background: var(–border);
+position: relative;
+z-index: 1;
+margin: 24px 0;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="site-title">
+    <div class="site-title-dot"></div>
+    歌词本
+  </div>
+  <div class="site-sub">lyrics journal</div>
+</header>
+
+<div class="divider"></div>
+
+<div class="card-area" id="cardArea">
+  <div class="state-msg" id="loadingMsg">
+    <div class="spinner"></div>
+    <span>loading</span>
+  </div>
+</div>
+
+<div class="section-gap"></div>
+
+<div class="form-section" id="formSection">
+  <div class="form-section-label">记录一条歌词</div>
+  <div class="form-group">
+    <div class="field">
+      <label>歌词</label>
+      <textarea id="lyricInput" placeholder="写下那句打动你的歌词…" rows="4"></textarea>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>歌名</label>
+        <input id="songInput" type="text" placeholder="歌名">
+      </div>
+      <div class="field">
+        <label>歌手</label>
+        <input id="artistInput" type="text" placeholder="歌手">
+      </div>
+    </div>
+  </div>
+  <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
+  <div class="form-msg" id="formMsg"></div>
+</div>
+
+<button class="fab" onclick="scrollToForm()" title="添加歌词">＋</button>
+
+<script>
+const SUPABASE_URL = 'https://zkpctzxyqpiiqxvnmauo.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcGN0enh5cXBpaXF4dm5tYXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNDkxNDAsImV4cCI6MjA5MDkyNTE0MH0.Z7WdneCs_vJOblWho1neuMLI86h1FrdNqi6N2-DI4ZQ';
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allLyrics = [];
+let currentId = null;
+
+async function loadLyrics() {
+  const { data, error } = await db
+    .from('lyrics')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  const area = document.getElementById('cardArea');
+
+  if (error || !data) {
+    area.innerHTML = `<div class="state-msg"><span>加载失败，请稍后再试</span></div>`;
+    return;
+  }
+
+  if (data.length === 0) {
+    area.innerHTML = `<div class="state-msg"><span>还没有歌词，去下面记录第一条吧 ↓</span></div>`;
+    return;
+  }
+
+  allLyrics = data;
+  showRandomCard(true);
+}
+
+function showRandomCard(initial = false) {
+  const area = document.getElementById('cardArea');
+
+  let candidates = allLyrics;
+  if (allLyrics.length > 1 && currentId) {
+    candidates = allLyrics.filter(l => l.id !== currentId);
+  }
+
+  const item = candidates[Math.floor(Math.random() * candidates.length)];
+  currentId = item.id;
+
+  const date = new Date(item.created_at);
+  const dateStr = `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;
+
+  area.innerHTML = `
+    <div class="card entering" id="lyricCard" onclick="showRandomCard()">
+      <div class="card-lyric">${escHtml(item.lyric)}</div>
+      <div class="card-meta">
+        <div class="card-song">
+          <div class="card-song-name">${escHtml(item.song_name)}</div>
+          <div class="card-artist">${escHtml(item.artist)}</div>
+        </div>
+        <div class="card-date">${dateStr}</div>
+      </div>
+    </div>
+    ${allLyrics.length > 1 ? '<div class="card-hint">点击换一条</div>' : ''}
+  `;
+
+  if (!initial) {
+    // re-trigger animation
+    const card = document.getElementById('lyricCard');
+    card.classList.remove('entering');
+    void card.offsetWidth;
+    card.classList.add('entering');
+  }
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function scrollToForm() {
+  document.getElementById('formSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => document.getElementById('lyricInput').focus(), 500);
+}
+
+async function submitLyric() {
+  const lyric  = document.getElementById('lyricInput').value.trim();
+  const song   = document.getElementById('songInput').value.trim();
+  const artist = document.getElementById('artistInput').value.trim();
+  const btn    = document.getElementById('submitBtn');
+  const msg    = document.getElementById('formMsg');
+
+  if (!lyric || !song || !artist) {
+    showMsg('请填写歌词、歌名和歌手', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '记录中…';
+
+  const { data, error } = await db
+    .from('lyrics')
+    .insert([{ lyric, song_name: song, artist }])
+    .select()
+    .single();
+
+  btn.disabled = false;
+  btn.textContent = '记 录';
+
+  if (error) {
+    showMsg('记录失败，请稍后再试', 'error');
+    return;
+  }
+
+  // success
+  document.getElementById('lyricInput').value = '';
+  document.getElementById('songInput').value  = '';
+  document.getElementById('artistInput').value = '';
+  showMsg('已记录 ✦', 'ok');
+
+  allLyrics.unshift(data);
+  currentId = data.id;
+  showRandomCard(false);
+
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 600);
+}
+
+function showMsg(text, type) {
+  const msg = document.getElementById('formMsg');
+  msg.textContent = text;
+  msg.style.color = type === 'error' ? '#b07070' : 'var(--accent-light)';
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+loadLyrics();
+</script>
+
+</body>
+</html>
