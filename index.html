@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -23,146 +24,205 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #f6f3ed;
-  --surface: #ffffff;
-  --border: #dcd9d0;
-  --text: #2a2825;
-  --text-soft: #7a756d;
-  --text-faint: #b8b1a8;
-  --accent: #3d3530;
-  --accent-light: #9e897a;
-  --shadow: rgba(40,30,20,0.05);
-  --ui-font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+–bg: #f6f3ed;
+–surface: #ffffff;
+–border: #dcd9d0;
+–text: #2a2825;
+–text-soft: #7a756d;
+–text-faint: #b8b1a8;
+–accent: #3d3530;
+–accent-light: #9e897a;
+–shadow: rgba(40,30,20,0.05);
+–ui-font: “PingFang SC”, “Hiragino Sans GB”, “Microsoft YaHei”, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #161412; --surface: #1e1c1a; --border: #3d3935;
-    --text: #e8e4de; --text-soft: #a8a096; --text-faint: #6e675e;
-    --accent: #f0e6d8; --accent-light: #c4a98a; --shadow: rgba(0,0,0,0.2);
-  }
+:root {
+–bg: #161412; –surface: #1e1c1a; –border: #3d3935;
+–text: #e8e4de; –text-soft: #a8a096; –text-faint: #6e675e;
+–accent: #f0e6d8; –accent-light: #c4a98a; –shadow: rgba(0,0,0,0.2);
+}
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--ui-font);
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 24px 60px;
+background: var(–bg);
+color: var(–text);
+font-family: var(–ui-font);
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0 24px 80px;
 }
 
 body::before {
-  content: ''; position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 0;
+content: ‘’; position: fixed; inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 200 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘3’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘0.05’/%3E%3C/svg%3E”);
+pointer-events: none; z-index: 0;
 }
 
 header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
-.site-title { font-family: 'Noto Serif SC', serif; font-size: 24px; letter-spacing: 0.15em; display: flex; align-items: center; gap: 10px; }
-.site-title-dot { width: 4px; height: 4px; background: var(--accent-light); border-radius: 50%; opacity: 0.6; }
-.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; }
+.site-title {
+font-family: ‘Noto Serif SC’, serif;
+font-size: 24px; letter-spacing: 0.15em;
+display: flex; align-items: center; gap: 10px;
+}
+.site-title-dot { width: 4px; height: 4px; background: var(–accent-light); border-radius: 50%; opacity: 0.6; }
+.site-sub { font-size: 10px; color: var(–text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; }
+
+.header-rule {
+width: 100%; max-width: 460px;
+height: 1px; background: var(–border);
+margin: 14px 0 0; z-index: 1;
+}
 
 .card-area {
-  width: 100%; max-width: 460px;
-  padding: 15px 0;
-  display: flex; flex-direction: column; align-items: center; z-index: 1;
+width: 100%; max-width: 460px;
+padding: 20px 0 8px;
+display: flex; flex-direction: column; align-items: center; z-index: 1;
 }
 
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 32px 26px;
-  box-shadow: 0 8px 24px var(--shadow);
-  width: 100%; position: relative;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+background: var(–surface);
+border: 1px solid var(–border);
+padding: 30px 26px 24px;
+box-shadow: 0 2px 0 var(–border), 0 8px 24px var(–shadow);
+width: 100%; position: relative;
+-webkit-tap-highlight-color: transparent;
+}
+
+.card::before {
+content: ‘’;
+position: absolute; left: 0; top: 16px; bottom: 16px;
+width: 2px; background: var(–accent-light); opacity: 0.35;
+}
+
+.card::after {
+content: ‘♩’;
+position: absolute; top: 10px; right: 14px;
+font-size: 13px; color: var(–text-faint); opacity: 0.25;
+pointer-events: none;
 }
 
 .card-lyric {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 1.05rem; line-height: 1.8;
-  white-space: pre-wrap; margin-bottom: 24px;
+font-family: ‘Noto Serif SC’, serif;
+font-weight: 300;
+font-size: 1.05rem; line-height: 2.1;
+color: var(–text);
+margin-bottom: 20px;
 }
 
-.card-meta { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 15px; border-top: 1px solid var(--bg); }
-.card-song-name { font-family: var(--ui-font); font-weight: 500; font-size: 13px; color: var(--text-soft); }
-.card-artist { font-family: var(--ui-font); font-size: 11px; color: var(--text-faint); margin-top: 3px; }
-.card-date { font-size: 10px; color: var(--text-faint); font-family: "Georgia", serif; opacity: 0.8; }
+.lyric-line { display: block; }
+
+.card-meta {
+display: flex; justify-content: space-between; align-items: flex-end;
+padding-top: 14px; border-top: 1px solid var(–border);
+}
+.card-song-name { font-weight: 500; font-size: 13px; color: var(–text-soft); }
+.card-artist { font-size: 11px; color: var(–text-faint); margin-top: 3px; }
+.card-date { font-size: 10px; color: var(–text-faint); font-family: “Georgia”, serif; opacity: 0.8; }
 
 .refresh-btn {
-  margin-top: 16px;
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-faint);
-  font-size: 11px;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-  font-family: var(--ui-font);
-  transition: all 0.3s;
+margin-top: 12px;
+display: flex; align-items: center; gap: 6px;
+padding: 7px 16px;
+border: 1px solid var(–border);
+background: var(–surface);
+color: var(–text-faint);
+font-size: 11px;
+font-family: var(–ui-font);
+letter-spacing: 0.08em;
+cursor: pointer;
+border-radius: 2px;
+box-shadow: 0 1px 0 var(–border);
+transition: border-color 0.25s, color 0.25s;
+-webkit-tap-highlight-color: transparent;
 }
-.refresh-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+.refresh-btn:hover { border-color: var(–accent-light); color: var(–accent-light); }
+.refresh-btn:active { opacity: 0.7; }
+.refresh-btn svg { transition: transform 0.4s; }
+.refresh-btn:hover svg { transform: rotate(180deg); }
 
-.form-section { width: 100%; max-width: 460px; z-index: 1; margin-top: 30px; }
-.form-section-label { font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; margin-bottom: 24px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.section-divider {
+width: 100%; max-width: 460px;
+display: flex; align-items: center; gap: 10px;
+margin: 18px 0; z-index: 1;
+}
+.section-divider::before, .section-divider::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
+.section-divider-text { font-size: 9px; color: var(–text-faint); letter-spacing: 0.35em; text-transform: uppercase; }
 
-.field { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-.field label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+.form-section { width: 100%; max-width: 460px; z-index: 1; }
+
+.field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 9px; color: var(–text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.08em; }
 
 .field input, .field textarea {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 8px 12px;
-  color: var(--text);
-  font-family: var(--ui-font);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 2px;
+padding: 7px 10px;
+color: var(–text);
+font-family: var(–ui-font);
+font-size: 14px;
+outline: none;
+-webkit-appearance: none;
+transition: border-color 0.25s;
+}
+.field input { height: 34px; }
+
+.field textarea {
+font-family: ‘Noto Serif SC’, serif;
+font-weight: 300;
+font-size: 14px;
+line-height: 1.85;
+height: 88px;
+resize: none;
 }
 
 .field input::placeholder, .field textarea::placeholder {
-  font-family: var(--ui-font);
-  color: var(--text-faint);
-  font-size: 13px;
+color: var(–text-faint); font-size: 13px;
 }
+.field textarea::placeholder { font-family: var(–ui-font); }
+.field input:focus, .field textarea:focus { border-color: var(–accent-light); }
 
-.field textarea { line-height: 1.6; height: 90px; }
-.field input:focus, .field textarea:focus { border-color: var(--accent-light); }
+.tip { font-size: 9px; color: var(–text-faint); margin-top: 3px; letter-spacing: 0.02em; opacity: 0.8; }
 
-.tip { font-size: 9px; color: var(--text-faint); margin-top: 4px; font-weight: 400; }
-
-.row { display: flex; gap: 15px; }
+.row { display: flex; gap: 12px; }
 .row .field { flex: 1; }
 
-@media (max-width: 480px) {
-  .row { flex-direction: column; gap: 0; }
-}
-
 .submit-btn {
-  width: 100%; padding: 12px; background: var(--accent); color: var(--bg);
-  border: none; border-radius: 4px; cursor: pointer;
-  letter-spacing: 0.6em; font-size: 13px; margin-top: 10px;
-  font-family: var(--ui-font);
+width: 100%; padding: 11px; background: var(–accent); color: var(–bg);
+border: none; border-radius: 2px; cursor: pointer;
+letter-spacing: 0.5em; font-size: 12px; margin-top: 6px;
+font-family: var(–ui-font);
+transition: opacity 0.2s;
 }
+.submit-btn:hover { opacity: 0.85; }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .fab {
-  position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px;
-  background: var(--accent); color: var(--bg); border: none; border-radius: 50%;
-  font-size: 18px; cursor: pointer; box-shadow: 0 4px 15px var(--shadow); z-index: 100;
-  display: flex; align-items: center; justify-content: center;
+position: fixed; bottom: 28px; right: 24px;
+width: 42px; height: 42px;
+background: var(–accent); color: var(–bg);
+border: none; border-radius: 50%;
+font-size: 20px; cursor: pointer;
+box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+z-index: 100;
+display: flex; align-items: center; justify-content: center;
+transition: transform 0.2s;
+-webkit-tap-highlight-color: transparent;
 }
+.fab:active { transform: scale(0.9); }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+from { opacity: 0; transform: translateY(6px); }
+to   { opacity: 1; transform: translateY(0); }
 }
-.entering { animation: fadeUp 0.6s ease-out forwards; }
+.entering { animation: fadeUp 0.5s ease-out forwards; }
+
+.state-msg { color: var(–text-faint); font-size: 12px; letter-spacing: 0.1em; padding: 40px 0; text-align: center; }
 </style>
+
 </head>
 <body>
 
@@ -170,15 +230,21 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
   <div class="site-title"><div class="site-title-dot"></div>歌词本</div>
   <div class="site-sub">LYRIC JOURNAL</div>
 </header>
+<div class="header-rule"></div>
 
-<div class="card-area" id="cardArea"></div>
+<div class="card-area" id="cardArea">
+  <div class="state-msg">加载中…</div>
+</div>
+
+<div class="section-divider" id="sectionDivider" style="display:none">
+  <span class="section-divider-text">记录</span>
+</div>
 
 <div class="form-section" id="formSection">
-  <div class="form-section-label">ADD NEW</div>
   <div class="field">
     <label>LYRICS</label>
-    <textarea id="lyricInput" placeholder="输入歌词内容..." rows="3"></textarea>
-    <div class="tip">* 填写时按回车键即可换行排版</div>
+    <textarea id="lyricInput" placeholder="输入歌词…每句单独一行更好看"></textarea>
+    <div class="tip">↵ 按回车换行，每句一行，展示时自动去掉末尾标点</div>
   </div>
   <div class="row">
     <div class="field">
@@ -191,7 +257,7 @@ header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
     </div>
   </div>
   <button class="submit-btn" id="submitBtn" onclick="submitLyric()">记 录</button>
-  <div id="formMsg" style="text-align:center; font-size:10px; margin-top:10px; color:var(--accent-light); height:14px;"></div>
+  <div id="formMsg" style="text-align:center;font-size:10px;margin-top:10px;color:var(--accent-light);height:14px;letter-spacing:0.1em;"></div>
 </div>
 
 <button class="fab" onclick="scrollToForm()">＋</button>
@@ -207,70 +273,94 @@ let currentId = null;
 
 async function loadLyrics() {
   const { data, error } = await db.from('lyrics').select('*').order('created_at', { ascending: false });
-  if (error || !data) return;
-  allLyrics = data;
-  if (data.length > 0) showRandomCard(true);
-}
-
-function showRandomCard(initial = false) {
   const area = document.getElementById('cardArea');
-  if (allLyrics.length === 0) return;
-  let candidates = allLyrics.length > 1 && currentId ? allLyrics.filter(l => l.id !== currentId) : allLyrics;
-  const item = candidates[Math.floor(Math.random() * candidates.length)];
-  currentId = item.id;
-  
-  const date = new Date(item.created_at);
-  const dateStr = `${date.getFullYear()} / ${date.getMonth()+1} / ${date.getDate()}`;
-
-  area.innerHTML = `
-    <div class="card entering" onclick="showRandomCard()">
-      <div class="card-lyric">${escHtml(item.lyric)}</div>
-      <div class="card-meta">
-        <div>
-          <div class="card-song-name">《${escHtml(item.song_name)}》</div>
-          <div class="card-artist">${escHtml(item.artist)}</div>
-        </div>
-        <div class="card-date">${dateStr}</div>
-      </div>
-    </div>
-    <button class="refresh-btn" onclick="showRandomCard()">换一条看看</button>
-  `;
+  if (error || !data || data.length === 0) {
+    area.innerHTML = '<div class="state-msg">还没有歌词，去下面记录第一条吧</div>';
+    return;
+  }
+  allLyrics = data;
+  document.getElementById('sectionDivider').style.display = 'flex';
+  showRandomCard(true);
 }
 
-function escHtml(str) { 
-  if(!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>'); 
+function formatLyric(str) {
+  var trailPunct = /[，。；？！、,.;?!\s]+$/;
+  return str.split('\n')
+    .map(function(l) { return l.trim().replace(trailPunct, ''); })
+    .filter(function(l) { return l.length > 0; });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showRandomCard(initial) {
+  var area = document.getElementById('cardArea');
+  var candidates = (allLyrics.length > 1 && currentId)
+    ? allLyrics.filter(function(l) { return l.id !== currentId; })
+    : allLyrics;
+  var item = candidates[Math.floor(Math.random() * candidates.length)];
+  currentId = item.id;
+
+  var date = new Date(item.created_at);
+  var dateStr = date.getFullYear() + ' · ' + (date.getMonth()+1) + ' · ' + date.getDate();
+
+  var lines = formatLyric(item.lyric);
+  var lyricHtml = lines.map(function(l) { return '<span class="lyric-line">' + escHtml(l) + '</span>'; }).join('');
+
+  var refreshIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>';
+
+  area.innerHTML =
+    '<div class="card entering">' +
+      '<div class="card-lyric">' + lyricHtml + '</div>' +
+      '<div class="card-meta">' +
+        '<div>' +
+          '<div class="card-song-name">《' + escHtml(item.song_name) + '》</div>' +
+          '<div class="card-artist">' + escHtml(item.artist) + '</div>' +
+        '</div>' +
+        '<div class="card-date">' + dateStr + '</div>' +
+      '</div>' +
+    '</div>' +
+    (allLyrics.length > 1 ? '<button class="refresh-btn" onclick="showRandomCard()">' + refreshIcon + ' 换一条</button>' : '');
 }
 
 async function submitLyric() {
-  const lyric = document.getElementById('lyricInput').value.trim();
-  const song = document.getElementById('songInput').value.trim();
-  const artist = document.getElementById('artistInput').value.trim();
-  const msg = document.getElementById('formMsg');
-  const btn = document.getElementById('submitBtn');
-
-  if (!lyric || !song || !artist) return;
-
+  var lyric = document.getElementById('lyricInput').value.trim();
+  var song = document.getElementById('songInput').value.trim();
+  var artist = document.getElementById('artistInput').value.trim();
+  var msg = document.getElementById('formMsg');
+  var btn = document.getElementById('submitBtn');
+  if (!lyric || !song || !artist) {
+    msg.innerText = '请填写全部字段';
+    setTimeout(function() { msg.innerText = ''; }, 2000);
+    return;
+  }
   btn.disabled = true;
-  const { data, error } = await db.from('lyrics').insert([{ lyric, song_name: song, artist }]).select().single();
-  
-  if (!error) {
-    msg.innerText = "SUCCESS";
-    allLyrics.unshift(data);
+  var result = await db.from('lyrics').insert([{ lyric: lyric, song_name: song, artist: artist }]).select().single();
+  if (!result.error) {
+    msg.innerText = '已记录 ✦';
+    allLyrics.unshift(result.data);
+    document.getElementById('sectionDivider').style.display = 'flex';
     showRandomCard(false);
     document.getElementById('lyricInput').value = '';
     document.getElementById('songInput').value = '';
     document.getElementById('artistInput').value = '';
-    setTimeout(() => { msg.innerText = ""; window.scrollTo({ top: 0, behavior: 'smooth' }); }, 1200);
+    setTimeout(function() { msg.innerText = ''; window.scrollTo({ top: 0, behavior: 'smooth' }); }, 1200);
+  } else {
+    msg.innerText = '记录失败，请稍后再试';
+    setTimeout(function() { msg.innerText = ''; }, 2500);
   }
   btn.disabled = false;
 }
 
-function scrollToForm() { 
-  const target = document.getElementById('formSection');
-  window.scrollTo({ top: target.offsetTop - 30, behavior: 'smooth' });
+function scrollToForm() {
+  window.scrollTo({ top: document.getElementById('formSection').offsetTop - 20, behavior: 'smooth' });
+  setTimeout(function() { document.getElementById('lyricInput').focus(); }, 400);
 }
+
 loadLyrics();
 </script>
+
 </body>
 </html>
