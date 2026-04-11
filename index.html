@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -23,204 +22,206 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* 修正点 1：变量定义必须使用两个半角短横线 -- */
 :root {
-–bg: #f6f3ed;
-–surface: #ffffff;
-–border: #dcd9d0;
-–text: #2a2825;
-–text-soft: #7a756d;
-–text-faint: #b8b1a8;
-–accent: #3d3530;
-–accent-light: #9e897a;
-–shadow: rgba(40,30,20,0.05);
-–ui-font: “PingFang SC”, “Hiragino Sans GB”, “Microsoft YaHei”, sans-serif;
+  --bg: #f6f3ed;
+  --surface: #ffffff;
+  --border: #dcd9d0;
+  --text: #2a2825;
+  --text-soft: #7a756d;
+  --text-faint: #b8b1a8;
+  --accent: #3d3530;
+  --accent-light: #9e897a;
+  --shadow: rgba(40,30,20,0.05);
+  --ui-font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-:root {
-–bg: #161412; –surface: #1e1c1a; –border: #3d3935;
-–text: #e8e4de; –text-soft: #a8a096; –text-faint: #6e675e;
-–accent: #f0e6d8; –accent-light: #c4a98a; –shadow: rgba(0,0,0,0.2);
-}
+  :root {
+    --bg: #161412; --surface: #1e1c1a; --border: #3d3935;
+    --text: #e8e4de; --text-soft: #a8a096; --text-faint: #6e675e;
+    --accent: #f0e6d8; --accent-light: #c4a98a; --shadow: rgba(0,0,0,0.2);
+  }
 }
 
 body {
-background: var(–bg);
-color: var(–text);
-font-family: var(–ui-font);
-min-height: 100dvh;
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 0 24px 80px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui-font);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 80px;
 }
 
+/* 修正点 2：SVG 代码内的单引号、双引号和 CSS 变量引用 */
 body::before {
-content: ‘’; position: fixed; inset: 0;
-background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 200 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘3’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘0.05’/%3E%3C/svg%3E”);
-pointer-events: none; z-index: 0;
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
 }
 
 header { width: 100%; max-width: 460px; padding: 40px 0 10px; z-index: 1; }
 .site-title {
-font-family: ‘Cormorant Garamond’, ‘Noto Serif SC’, ‘Noto Serif KR’, serif;
-font-size: 24px; letter-spacing: 0.15em;
-display: flex; align-items: center; gap: 10px;
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', 'Noto Serif KR', serif;
+  font-size: 24px; letter-spacing: 0.15em;
+  display: flex; align-items: center; gap: 10px;
 }
-.site-title-dot { width: 4px; height: 4px; background: var(–accent-light); border-radius: 50%; opacity: 0.6; }
-.site-sub { font-size: 10px; color: var(–text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; }
+.site-title-dot { width: 4px; height: 4px; background: var(--accent-light); border-radius: 50%; opacity: 0.6; }
+.site-sub { font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 14px; margin-top: 4px; }
 
 .header-rule {
-width: 100%; max-width: 460px;
-height: 1px; background: var(–border);
-margin: 14px 0 0; z-index: 1;
+  width: 100%; max-width: 460px;
+  height: 1px; background: var(--border);
+  margin: 14px 0 0; z-index: 1;
 }
 
 .card-area {
-width: 100%; max-width: 460px;
-padding: 20px 0 8px;
-display: flex; flex-direction: column; align-items: center; z-index: 1;
+  width: 100%; max-width: 460px;
+  padding: 20px 0 8px;
+  display: flex; flex-direction: column; align-items: center; z-index: 1;
 }
 
 .card {
-background: var(–surface);
-border: 1px solid var(–border);
-padding: 30px 26px 24px;
-box-shadow: 0 2px 0 var(–border), 0 8px 24px var(–shadow);
-width: 100%; position: relative;
--webkit-tap-highlight-color: transparent;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 30px 26px 24px;
+  box-shadow: 0 2px 0 var(--border), 0 8px 24px var(--shadow);
+  width: 100%; position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .card::before {
-content: ‘’;
-position: absolute; left: 0; top: 16px; bottom: 16px;
-width: 2px; background: var(–accent-light); opacity: 0.35;
+  content: '';
+  position: absolute; left: 0; top: 16px; bottom: 16px;
+  width: 2px; background: var(--accent-light); opacity: 0.35;
 }
 
 .card::after {
-content: ‘♩’;
-position: absolute; top: 10px; right: 14px;
-font-size: 13px; color: var(–text-faint); opacity: 0.25;
-pointer-events: none;
+  content: '♩';
+  position: absolute; top: 10px; right: 14px;
+  font-size: 13px; color: var(--text-faint); opacity: 0.25;
+  pointer-events: none;
 }
 
 .card-lyric {
-font-family: ‘Cormorant Garamond’, ‘Noto Serif SC’, ‘Noto Serif KR’, serif;
-font-weight: 300;
-font-size: 1.05rem; line-height: 2.1;
-color: var(–text);
-margin-bottom: 20px;
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', 'Noto Serif KR', serif;
+  font-weight: 300;
+  font-size: 1.05rem; line-height: 2.1;
+  color: var(--text);
+  margin-bottom: 20px;
 }
 
 .lyric-line { display: block; }
 
 .card-meta {
-display: flex; justify-content: space-between; align-items: flex-end;
-padding-top: 14px; border-top: 1px solid var(–border);
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-top: 14px; border-top: 1px solid var(--border);
 }
-.card-song-name { font-weight: 500; font-size: 13px; color: var(–text-soft); }
-.card-artist { font-size: 11px; color: var(–text-faint); margin-top: 3px; }
-.card-date { font-size: 10px; color: var(–text-faint); font-family: “Georgia”, serif; opacity: 0.8; }
+.card-song-name { font-weight: 500; font-size: 13px; color: var(--text-soft); }
+.card-artist { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+.card-date { font-size: 10px; color: var(--text-faint); font-family: "Georgia", serif; opacity: 0.8; }
 
 .refresh-btn {
-margin-top: 12px;
-display: flex; align-items: center; gap: 6px;
-padding: 7px 16px;
-border: 1px solid var(–border);
-background: var(–surface);
-color: var(–text-faint);
-font-size: 11px;
-font-family: var(–ui-font);
-letter-spacing: 0.08em;
-cursor: pointer;
-border-radius: 2px;
-box-shadow: 0 1px 0 var(–border);
-transition: border-color 0.25s, color 0.25s;
--webkit-tap-highlight-color: transparent;
+  margin-top: 12px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-faint);
+  font-size: 11px;
+  font-family: var(--ui-font);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 var(--border);
+  transition: border-color 0.25s, color 0.25s;
+  -webkit-tap-highlight-color: transparent;
 }
-.refresh-btn:hover { border-color: var(–accent-light); color: var(–accent-light); }
+.refresh-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
 .refresh-btn:active { opacity: 0.7; }
 .refresh-btn svg { transition: transform 0.4s; }
 .refresh-btn:hover svg { transform: rotate(180deg); }
 
 .section-divider {
-width: 100%; max-width: 460px;
-display: flex; align-items: center; gap: 10px;
-margin: 18px 0; z-index: 1;
+  width: 100%; max-width: 460px;
+  display: flex; align-items: center; gap: 10px;
+  margin: 18px 0; z-index: 1;
 }
-.section-divider::before, .section-divider::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
-.section-divider-text { font-size: 9px; color: var(–text-faint); letter-spacing: 0.35em; text-transform: uppercase; }
+.section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-divider-text { font-size: 9px; color: var(--text-faint); letter-spacing: 0.35em; text-transform: uppercase; }
 
 .form-section { width: 100%; max-width: 460px; z-index: 1; }
 
 .field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 5px; }
-.field label { font-size: 9px; color: var(–text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.08em; }
+.field label { font-size: 9px; color: var(--text-faint); text-transform: uppercase; font-weight: 600; letter-spacing: 0.08em; }
 
 .field input, .field textarea {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 2px;
-padding: 7px 10px;
-color: var(–text);
-font-family: var(–ui-font);
-font-size: 14px;
-outline: none;
--webkit-appearance: none;
-transition: border-color 0.25s;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 7px 10px;
+  color: var(--text);
+  font-family: var(--ui-font);
+  font-size: 14px;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.25s;
 }
 .field input { height: 34px; }
 
 .field textarea {
-font-family: ‘Cormorant Garamond’, ‘Noto Serif SC’, ‘Noto Serif KR’, serif;
-font-weight: 300;
-font-size: 14px;
-line-height: 1.85;
-height: 88px;
-resize: none;
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', 'Noto Serif KR', serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.85;
+  height: 88px;
+  resize: none;
 }
 
 .field input::placeholder, .field textarea::placeholder {
-color: var(–text-faint); font-size: 13px;
+  color: var(--text-faint); font-size: 13px;
 }
-.field textarea::placeholder { font-family: var(–ui-font); }
-.field input:focus, .field textarea:focus { border-color: var(–accent-light); }
+.field textarea::placeholder { font-family: var(--ui-font); }
+.field input:focus, .field textarea:focus { border-color: var(--accent-light); }
 
-.tip { font-size: 9px; color: var(–text-faint); margin-top: 3px; letter-spacing: 0.02em; opacity: 0.8; }
+.tip { font-size: 9px; color: var(--text-faint); margin-top: 3px; letter-spacing: 0.02em; opacity: 0.8; }
 
 .row { display: flex; gap: 12px; }
 .row .field { flex: 1; }
 
 .submit-btn {
-width: 100%; padding: 11px; background: var(–accent); color: var(–bg);
-border: none; border-radius: 2px; cursor: pointer;
-letter-spacing: 0.5em; font-size: 12px; margin-top: 6px;
-font-family: var(–ui-font);
-transition: opacity 0.2s;
+  width: 100%; padding: 11px; background: var(--accent); color: var(--bg);
+  border: none; border-radius: 2px; cursor: pointer;
+  letter-spacing: 0.5em; font-size: 12px; margin-top: 6px;
+  font-family: var(--ui-font);
+  transition: opacity 0.2s;
 }
 .submit-btn:hover { opacity: 0.85; }
 .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .fab {
-position: fixed; bottom: 28px; right: 24px;
-width: 42px; height: 42px;
-background: var(–accent); color: var(–bg);
-border: none; border-radius: 50%;
-font-size: 20px; cursor: pointer;
-box-shadow: 0 3px 14px rgba(0,0,0,0.15);
-z-index: 100;
-display: flex; align-items: center; justify-content: center;
-transition: transform 0.2s;
--webkit-tap-highlight-color: transparent;
+  position: fixed; bottom: 28px; right: 24px;
+  width: 42px; height: 42px;
+  background: var(--accent); color: var(--bg);
+  border: none; border-radius: 50%;
+  font-size: 20px; cursor: pointer;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.15);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 .fab:active { transform: scale(0.9); }
 
 @keyframes fadeUp {
-from { opacity: 0; transform: translateY(6px); }
-to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .entering { animation: fadeUp 0.5s ease-out forwards; }
 
-.state-msg { color: var(–text-faint); font-size: 12px; letter-spacing: 0.1em; padding: 40px 0; text-align: center; }
+.state-msg { color: var(--text-faint); font-size: 12px; letter-spacing: 0.1em; padding: 40px 0; text-align: center; }
 </style>
 
 </head>
@@ -263,6 +264,7 @@ to   { opacity: 1; transform: translateY(0); }
 <button class="fab" onclick="scrollToForm()">＋</button>
 
 <script>
+// 注意：Supabase 的 URL 和 KEY 是私密信息，请确保在生产环境中妥善保护。
 const SUPABASE_URL = 'https://zkpctzxyqpiiqxvnmauo.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprcGN0enh5cXBpaXF4dm5tYXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNDkxNDAsImV4cCI6MjA5MDkyNTE0MH0.Z7WdneCs_vJOblWho1neuMLI86h1FrdNqi6N2-DI4ZQ';
 const { createClient } = supabase;
